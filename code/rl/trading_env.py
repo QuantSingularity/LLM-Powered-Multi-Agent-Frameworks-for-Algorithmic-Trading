@@ -152,13 +152,16 @@ class TradingEnv(gym.Env):
         return obs, reward, terminated, truncated, info
 
     def _discrete_action_to_position(self, action: int) -> float:
-        """Convert discrete action to target position."""
+        """Convert discrete action to target position fraction of portfolio."""
         if action == 0:  # Sell
-            return -0.5 * self.max_position
-        elif action == 1:  # Hold
-            return 0.0  # No change
+            return -self.max_position
+        elif action == 1:  # Hold — maintain current position
+            if self.total_value > 0:
+                current_price = self.data.iloc[self.current_step]["close"]
+                return (self.position * current_price) / self.total_value
+            return 0.0
         else:  # Buy
-            return 0.5 * self.max_position
+            return self.max_position
 
     def _execute_trade(self, target_position_pct: float, current_price: float) -> float:
         """

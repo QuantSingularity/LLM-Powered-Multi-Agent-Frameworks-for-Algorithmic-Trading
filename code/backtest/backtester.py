@@ -90,8 +90,6 @@ class Backtester:
                 exec_price = cost_info["exec_price"]
                 commission = cost_info["commission"]
 
-                abs(shares_to_trade) * exec_price
-
                 if side == "BUY":
                     required_cash = shares_to_trade * exec_price + commission
                     if required_cash <= cash[t] + 1e-9:
@@ -122,9 +120,13 @@ class Backtester:
                     }
                 )
 
+        gross_metrics = self._calculate_metrics(pv_gross, data.index, trades)
+        net_metrics = self._calculate_metrics(pv_net, data.index, trades)
+
         metrics = {
-            "gross": self._calculate_metrics(pv_gross, data.index),
-            "net": self._calculate_metrics(pv_net, data.index),
+            **net_metrics,
+            "gross": gross_metrics,
+            "net": net_metrics,
         }
 
         results_df = pd.DataFrame(
@@ -133,6 +135,7 @@ class Backtester:
                 "position": position,
                 "pv_gross": pv_gross,
                 "pv_net": pv_net,
+                "portfolio_value": pv_net,
                 "price": prices,
             },
             index=data.index,
@@ -146,7 +149,7 @@ class Backtester:
         }
 
     def _calculate_metrics(
-        self, pv: np.ndarray, idx: pd.DatetimeIndex
+        self, pv: np.ndarray, idx: pd.DatetimeIndex, trades: list
     ) -> Dict[str, float]:
         r = np.diff(pv) / pv[:-1]
         r = r[np.isfinite(r)]
@@ -160,6 +163,7 @@ class Backtester:
         peak = np.maximum.accumulate(pv)
         dd = (pv / peak) - 1
         mdd = float(dd.min())
+
         return {
             "total_return": float(total_return),
             "annualized_return": float(ann_return),
@@ -167,4 +171,5 @@ class Backtester:
             "sharpe_ratio": float(sharpe),
             "max_drawdown": float(mdd),
             "final_value": float(pv[-1]),
+            "num_trades": len(trades),
         }

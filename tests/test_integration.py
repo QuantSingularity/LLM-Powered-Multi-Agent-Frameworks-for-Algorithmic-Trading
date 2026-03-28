@@ -92,8 +92,10 @@ def test_end_to_end_pipeline():
     backtest_result = backtester.run(feature_data["TEST"], signals)
 
     assert "metrics" in backtest_result
-    assert "total_return" in backtest_result["metrics"]
-    assert isinstance(backtest_result["metrics"]["total_return"], float)
+
+    metrics = backtest_result["metrics"]
+    assert "total_return" in metrics
+    assert isinstance(metrics["total_return"], float)
 
     print("\n✅ All integration tests passed!")
 
@@ -102,7 +104,6 @@ def test_reproducibility():
     """Test that results are reproducible with same seed."""
 
     results1 = []
-    results2 = []
 
     for seed in [42, 42]:  # Same seed twice
         np.random.seed(seed)

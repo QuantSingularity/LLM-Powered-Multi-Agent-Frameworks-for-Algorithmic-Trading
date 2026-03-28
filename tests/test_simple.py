@@ -87,6 +87,7 @@ signal_series = pd.Series(
 signal_series = signal_series.replace({0: -1, 1: 0, 2: 1})
 
 result = backtester.run(feature_data["TEST"], signal_series)
+
 metrics = result["metrics"]
 
 print(f"✓ Backtest completed:")

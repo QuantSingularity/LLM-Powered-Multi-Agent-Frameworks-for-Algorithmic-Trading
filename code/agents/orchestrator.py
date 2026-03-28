@@ -188,7 +188,7 @@ class DecisionAgent(BaseAgent):
         )
 
     def _parse_decision(self, decision_text: str) -> Dict[str, Any]:
-        import json
+        """Parse decision text into structured format."""
 
         try:
             j = json.loads(decision_text)
@@ -196,7 +196,7 @@ class DecisionAgent(BaseAgent):
                 return {**j, "raw_text": decision_text}
         except Exception:
             pass
-        """Parse decision text into structured format."""
+
         # Simple parsing of "ACTION SIZE" format
         parts = decision_text.strip().split()
 
@@ -404,13 +404,14 @@ class MultiAgentOrchestrator:
     def __init__(self, llm_config: LLMConfig, agent_config: Optional[Dict] = None):
         self.llm = LLMWrapper(llm_config)
         self.prompt_registry = PromptRegistry()
-        self.risk_manager = RiskManager(RiskConfig())
+
+        self.portfolio_risk_manager = RiskManager(RiskConfig())
         self.agent_config = agent_config or {}
 
         # Initialize agents
         self.analyst = AnalystAgent(self.llm, self.agent_config.get("analyst"))
         self.decision_maker = DecisionAgent(self.llm, self.agent_config.get("decision"))
-        self.risk_manager = RiskAgent(self.llm, self.agent_config.get("risk"))
+        self.risk_agent = RiskAgent(self.llm, self.agent_config.get("risk"))
         self.executor = ExecutionAgent(self.llm, self.agent_config.get("execution"))
         self.explainer = ExplainabilityAgent(
             self.llm, self.agent_config.get("explainability")
@@ -436,7 +437,7 @@ class MultiAgentOrchestrator:
         self.message_log.append(decision_msg)
 
         # Step 3: Risk check
-        risk_msg, approved = self.risk_manager.process(context, decision_msg)
+        risk_msg, approved = self.risk_agent.process(context, decision_msg)
         self.message_log.append(risk_msg)
 
         if not approved:

@@ -67,9 +67,7 @@ class LLMWrapper:
 
         if self.backend == "litellm":
             self._init_litellm()
-        elif self.backend == "litellm":
-            return self._generate_litellm(prompt, system_prompt, **kwargs)
-        if self.backend == "openai":
+        elif self.backend == "openai":
             self._init_openai()
         elif self.backend == "anthropic":
             self._init_anthropic()
@@ -171,11 +169,10 @@ class LLMWrapper:
         Returns:
             Generated text
         """
+
         if self.backend == "litellm":
-            self._init_litellm()
-        elif self.backend == "litellm":
             return self._generate_litellm(prompt, system_prompt, **kwargs)
-        if self.backend == "openai":
+        elif self.backend == "openai":
             return self._generate_openai(prompt, system_prompt, **kwargs)
         elif self.backend == "anthropic":
             return self._generate_anthropic(prompt, system_prompt, **kwargs)
@@ -183,6 +180,8 @@ class LLMWrapper:
             return self._generate_local(prompt, system_prompt, **kwargs)
         elif self.backend == "mock":
             return self._generate_mock(prompt, system_prompt, **kwargs)
+        else:
+            raise ValueError(f"Unknown backend: {self.backend}")
 
     def _generate_litellm(
         self, prompt: str, system_prompt: Optional[str], **kwargs

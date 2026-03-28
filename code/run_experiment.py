@@ -187,11 +187,11 @@ class ExperimentRunner:
 
             train_stats = trainer.train(total_timesteps=self.config["rl"]["timesteps"])
 
-            # Test hybrid agent
-            TradingEnv(test_df)
+            test_env = TradingEnv(test_df)
             orchestrator = MultiAgentOrchestrator(llm_config)
 
             # Run hybrid evaluation (simplified)
+            trainer.env = test_env
             eval_stats = trainer.evaluate(n_episodes=5)
 
             results[ticker] = {
@@ -201,57 +201,52 @@ class ExperimentRunner:
                 "orchestrator": orchestrator,
             }
 
-            logger.info(f"  {ticker} - Mean reward: {eval_stats['mean_reward']:.2f}")
-
         return results
 
     def run_backtests(
-        self, feature_data: Dict[str, pd.DataFrame], trained_agents: Dict[str, Any]
+        self,
+        feature_data: Dict[str, pd.DataFrame],
+        hybrid_results: Dict[str, Any],
     ) -> Dict[str, Any]:
-        """Run comprehensive backtests."""
+        """Run backtests for all strategies."""
         logger.info("Running backtests...")
 
         backtester = Backtester(BacktestConfig())
-        results = {}
+        backtest_results = {}
 
         for ticker, df in feature_data.items():
-            logger.info(f"Backtesting {ticker}")
+            logger.info(f"  Backtesting {ticker}...")
 
-            # Generate signals from trained agent
-            trainer = trained_agents[ticker]["trainer"]
+            # Generate signals from trained RL agent
+            trainer = hybrid_results[ticker]["trainer"]
             env = TradingEnv(df)
-
-            signals = []
-            obs, info = env.reset()
+            obs, _ = env.reset()
+            signals_list = []
             done = False
-
             while not done:
                 action, _ = trainer.model.predict(obs, deterministic=True)
-                signals.append(action)
-                obs, reward, terminated, truncated, info = env.step(action)
+                signals_list.append(int(action))
+                obs, _, terminated, truncated, _ = env.step(action)
                 done = terminated or truncated
 
-            # Convert actions to signals (-1, 0, 1)
-            # Match lengths properly
-            signal_idx = df.index[
-                env.lookback_window : env.lookback_window + len(signals)
-            ]
-            signal_series = pd.Series(signals, index=signal_idx)
-            signal_series = signal_series.replace({0: -1, 1: 0, 2: 1})
+            # Map discrete actions to signal values (-1, 0, +1)
+            signal_series = pd.Series(
+                signals_list,
+                index=df.index[
+                    env.lookback_window : env.lookback_window + len(signals_list)
+                ],
+            ).replace({0: -1, 1: 0, 2: 1})
 
-            # Run backtest
-            backtest_result = backtester.run(df, signal_series)
-
-            results[ticker] = backtest_result
-
+            result = backtester.run(df, signal_series)
+            backtest_results[ticker] = result
+            metrics = result["metrics"]
             logger.info(
-                f"  {ticker} - Total return: {backtest_result['metrics']['total_return']:.2%}"
-            )
-            logger.info(
-                f"  {ticker} - Sharpe ratio: {backtest_result['metrics']['sharpe_ratio']:.2f}"
+                f"  {ticker}: return={metrics['total_return']:.2%} "
+                f"sharpe={metrics['sharpe_ratio']:.2f} "
+                f"mdd={metrics['max_drawdown']:.2%}"
             )
 
-        return results
+        return backtest_results
 
     def generate_figures(
         self, backtest_results: Dict[str, Any], comparison_df: pd.DataFrame
@@ -364,10 +359,10 @@ class ExperimentRunner:
             ax = axes[idx]
             df = result["results"]
 
+            pv_col = "portfolio_value" if "portfolio_value" in df.columns else "pv_net"
+
             # Normalize to 100
-            df["portfolio_pct"] = (
-                df["portfolio_value"] / df["portfolio_value"].iloc[0] * 100
-            )
+            df["portfolio_pct"] = df[pv_col] / df[pv_col].iloc[0] * 100
             df["bh_pct"] = df["price"] / df["price"].iloc[0] * 100
 
             ax.plot(df.index, df["portfolio_pct"], label="Strategy", linewidth=2)
@@ -396,8 +391,9 @@ class ExperimentRunner:
 
         for idx, metric in enumerate(metrics):
             ax = axes[idx]
-            data = comparison_df[metric].sort_values()
-            data.plot(kind="barh", ax=ax, color="steelblue")
+            if metric in comparison_df.columns:
+                data = comparison_df[metric].sort_values()
+                data.plot(kind="barh", ax=ax, color="steelblue")
             ax.set_xlabel(metric.replace("_", " ").title())
             ax.set_ylabel("Strategy")
             ax.grid(True, alpha=0.3, axis="x")
@@ -417,8 +413,9 @@ class ExperimentRunner:
 
         for ticker, result in backtest_results.items():
             df = result["results"]
-            cummax = df["portfolio_value"].cummax()
-            drawdown = (df["portfolio_value"] - cummax) / cummax
+            pv_col = "portfolio_value" if "portfolio_value" in df.columns else "pv_net"
+            cummax = df[pv_col].cummax()
+            drawdown = (df[pv_col] - cummax) / cummax
 
             ax.fill_between(df.index, drawdown * 100, 0, alpha=0.3, label=ticker)
 
@@ -488,7 +485,6 @@ class ExperimentRunner:
         self.train_rl_baseline(data["features"])
         hybrid_agent = self.train_hybrid_agent(data["features"])
 
-        # Run backtests
         backtest_results = self.run_backtests(data["features"], hybrid_agent)
 
         # Create comparison
@@ -550,4 +546,5 @@ if __name__ == "__main__":
     for ticker, metrics in results["metrics"]["backtest"].items():
         print(f"\n{ticker}:")
         for key, value in metrics.items():
-            print(f"  {key}: {value:.4f}")
+            if isinstance(value, float):
+                print(f"  {key}: {value:.4f}")

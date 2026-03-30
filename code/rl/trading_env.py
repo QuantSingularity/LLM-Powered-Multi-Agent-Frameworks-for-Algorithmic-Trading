@@ -483,6 +483,6 @@ if __name__ == "__main__":
             break
 
     stats = env.get_portfolio_stats()
-    print(f"\nEpisode stats:")
+    print("\nEpisode stats:")
     for key, value in stats.items():
         print(f"  {key}: {value:.4f}")

@@ -90,7 +90,7 @@ result = backtester.run(feature_data["TEST"], signal_series)
 
 metrics = result["metrics"]
 
-print(f"✓ Backtest completed:")
+print("✓ Backtest completed:")
 print(f"  - Total Return: {metrics['total_return']:.2%}")
 print(f"  - Sharpe Ratio: {metrics['sharpe_ratio']:.2f}")
 print(f"  - Max Drawdown: {metrics['max_drawdown']:.2%}")

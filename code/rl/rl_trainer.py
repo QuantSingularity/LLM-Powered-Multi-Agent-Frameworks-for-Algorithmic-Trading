@@ -302,6 +302,6 @@ if __name__ == "__main__":
 
     # Evaluate
     eval_stats = trainer.evaluate(n_episodes=5)
-    print(f"\nEvaluation stats:")
+    print("\nEvaluation stats:")
     for key, value in eval_stats.items():
         print(f"  {key}: {value:.2f}")

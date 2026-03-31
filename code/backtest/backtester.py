@@ -6,13 +6,13 @@ Enhancements:
 - Supports continuous target weights
 """
 
+import logging
+from dataclasses import dataclass
+from typing import Any, Dict, Optional
+
 import numpy as np
 import pandas as pd
-from typing import Dict, Any, Optional
-from dataclasses import dataclass
-import logging
-
-from costs.transaction_costs import TransactionCostModel, CostModelConfig
+from costs.transaction_costs import CostModelConfig, TransactionCostModel
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

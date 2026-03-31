@@ -3,10 +3,11 @@ Data loader for market data from multiple sources.
 Implements fetching from Yahoo Finance, FRED, and synthetic generation.
 """
 
-import os
 import logging
-from typing import List, Dict, Optional
+import os
 from datetime import datetime, timedelta
+from typing import Dict, List, Optional
+
 import numpy as np
 import pandas as pd
 import yfinance as yf

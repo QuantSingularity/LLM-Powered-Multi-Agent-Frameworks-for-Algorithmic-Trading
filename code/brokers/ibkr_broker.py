@@ -6,7 +6,7 @@ Requires TWS/IB Gateway running and reachable.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Any, Dict
 
 
 @dataclass
@@ -39,7 +39,7 @@ class IBKRBroker:
     def place_market_order(self, symbol: str, qty: float, side: str) -> Dict[str, Any]:
         if not self.ib or not self.ib.isConnected():
             return {"status": "not_connected"}
-        from ib_insync import Stock, MarketOrder
+        from ib_insync import MarketOrder, Stock
 
         contract = Stock(symbol, "SMART", "USD")
         order = MarketOrder(side.upper(), qty)

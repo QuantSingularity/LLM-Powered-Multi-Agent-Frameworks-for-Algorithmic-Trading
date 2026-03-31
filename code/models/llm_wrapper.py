@@ -3,11 +3,11 @@ LLM wrapper for trading agents with support for multiple backends.
 Implements prompt templates and context management.
 """
 
-import os
 import json
 import logging
-from typing import Dict, Optional, Any
+import os
 from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ except ImportError:
 
 try:
     import torch
-    from transformers import AutoTokenizer, AutoModelForCausalLM
+    from transformers import AutoModelForCausalLM, AutoTokenizer
 
     TRANSFORMERS_AVAILABLE = True
 except ImportError:

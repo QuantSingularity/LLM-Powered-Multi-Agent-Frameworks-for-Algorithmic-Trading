@@ -3,13 +3,14 @@ RL agent trainer using Stable-Baselines3.
 Integrates with LLM agents for hybrid decision-making.
 """
 
-import os
 import logging
-from typing import Dict, Optional, Any
-import numpy as np
-from stable_baselines3 import PPO, DQN, A2C
-from stable_baselines3.common.callbacks import BaseCallback, EvalCallback
+import os
+from typing import Any, Dict, Optional
+
 import gymnasium as gym
+import numpy as np
+from stable_baselines3 import A2C, DQN, PPO
+from stable_baselines3.common.callbacks import BaseCallback, EvalCallback
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -277,10 +278,11 @@ class HybridAgent:
 
 
 if __name__ == "__main__":
-    from rl.trading_env import TradingEnv
-    from data.market_data_loader import SyntheticMarketGenerator
-    from data.feature_engineering import FeatureEngineer
     from datetime import datetime, timedelta
+
+    from data.feature_engineering import FeatureEngineer
+    from data.market_data_loader import SyntheticMarketGenerator
+    from rl.trading_env import TradingEnv
 
     # Generate test data
     generator = SyntheticMarketGenerator(seed=42)

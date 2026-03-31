@@ -9,11 +9,11 @@ variants for A/B tests.
 
 from __future__ import annotations
 
+import random
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Optional
 
-import random
 import yaml
 
 

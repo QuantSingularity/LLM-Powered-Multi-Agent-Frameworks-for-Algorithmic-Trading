@@ -3,12 +3,13 @@ Reinforcement Learning environment for LLM-agent trading.
 Implements Gymnasium environment with realistic market dynamics.
 """
 
+import logging
+from typing import Any, Dict, Optional, Tuple
+
 import gymnasium as gym
-from gymnasium import spaces
 import numpy as np
 import pandas as pd
-from typing import Dict, Optional, Tuple, Any
-import logging
+from gymnasium import spaces
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -449,9 +450,10 @@ class MultiAssetTradingEnv(gym.Env):
 
 if __name__ == "__main__":
     # Test environment
-    from data.market_data_loader import SyntheticMarketGenerator
-    from data.feature_engineering import FeatureEngineer
     from datetime import datetime, timedelta
+
+    from data.feature_engineering import FeatureEngineer
+    from data.market_data_loader import SyntheticMarketGenerator
 
     # Generate synthetic data
     generator = SyntheticMarketGenerator(seed=42)

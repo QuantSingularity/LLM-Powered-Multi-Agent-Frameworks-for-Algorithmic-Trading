@@ -3,12 +3,13 @@ Feature engineering module for trading signals.
 Computes technical indicators, sentiment features, and macro features.
 """
 
+from typing import Dict, List
+
 import numpy as np
 import pandas as pd
-from typing import Dict, List
-from ta.trend import SMAIndicator, EMAIndicator, MACD
 from ta.momentum import RSIIndicator, StochasticOscillator
-from ta.volatility import BollingerBands, AverageTrueRange
+from ta.trend import MACD, EMAIndicator, SMAIndicator
+from ta.volatility import AverageTrueRange, BollingerBands
 from ta.volume import OnBalanceVolumeIndicator
 
 
@@ -300,8 +301,9 @@ class TargetGenerator:
 
 
 if __name__ == "__main__":
-    from market_data_loader import MarketDataLoader, SyntheticNewsGenerator
     from datetime import datetime, timedelta
+
+    from market_data_loader import MarketDataLoader, SyntheticNewsGenerator
 
     # Test feature engineering
     loader = MarketDataLoader()

@@ -3,15 +3,16 @@ Main experiment runner for LLM-powered multi-agent trading research.
 Implements complete experimental pipeline with baselines and ablations.
 """
 
-import os
-import sys
 import json
 import logging
+import os
+import sys
 from datetime import datetime
-from typing import Dict, Any
+from typing import Any, Dict
+
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -20,17 +21,17 @@ import seaborn as sns
 # Add code directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
+from agents.orchestrator import MultiAgentOrchestrator
+from backtest.backtester import BacktestConfig, Backtester
+from data.feature_engineering import FeatureEngineer
 from data.market_data_loader import (
     MarketDataLoader,
     SyntheticMarketGenerator,
     SyntheticNewsGenerator,
 )
-from data.feature_engineering import FeatureEngineer
 from models.llm_wrapper import LLMConfig
-from agents.orchestrator import MultiAgentOrchestrator
-from rl.trading_env import TradingEnv
 from rl.rl_trainer import RLTrainer
-from backtest.backtester import Backtester, BacktestConfig
+from rl.trading_env import TradingEnv
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"

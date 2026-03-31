@@ -3,17 +3,17 @@ Multi-agent orchestration system for LLM-powered trading.
 Implements hierarchical agent communication and decision flow.
 """
 
+import json
 import logging
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-import json
-import pandas as pd
-import numpy as np
+from typing import Any, Dict, List, Optional, Tuple
 
-from models.llm_wrapper import LLMWrapper, LLMConfig, PromptTemplate
-from risk.risk_manager import RiskManager, RiskConfig
+import numpy as np
+import pandas as pd
+from models.llm_wrapper import LLMConfig, LLMWrapper, PromptTemplate
 from prompts.prompt_registry import PromptRegistry
+from risk.risk_manager import RiskConfig, RiskManager
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

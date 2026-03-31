@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Any, Dict
 
 
 @dataclass
@@ -40,8 +40,8 @@ class AlpacaBroker:
     def submit_market_order(self, symbol: str, qty: float, side: str) -> Dict[str, Any]:
         if not self.client:
             return {"status": "not_configured"}
-        from alpaca.trading.requests import MarketOrderRequest
         from alpaca.trading.enums import OrderSide, TimeInForce
+        from alpaca.trading.requests import MarketOrderRequest
 
         req = MarketOrderRequest(
             symbol=symbol,

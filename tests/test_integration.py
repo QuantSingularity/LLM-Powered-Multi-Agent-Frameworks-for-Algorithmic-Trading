@@ -9,14 +9,13 @@ sys.path.insert(0, "/workspace/code")
 
 import numpy as np
 import pandas as pd
-
-from data.market_data_loader import SyntheticMarketGenerator, SyntheticNewsGenerator
-from data.feature_engineering import FeatureEngineer
-from models.llm_wrapper import LLMConfig
 from agents.orchestrator import MultiAgentOrchestrator, TradingContext
-from rl.trading_env import TradingEnv
+from backtest.backtester import BacktestConfig, Backtester
+from data.feature_engineering import FeatureEngineer
+from data.market_data_loader import SyntheticMarketGenerator, SyntheticNewsGenerator
+from models.llm_wrapper import LLMConfig
 from rl.rl_trainer import RLTrainer
-from backtest.backtester import Backtester, BacktestConfig
+from rl.trading_env import TradingEnv
 
 
 def test_end_to_end_pipeline():

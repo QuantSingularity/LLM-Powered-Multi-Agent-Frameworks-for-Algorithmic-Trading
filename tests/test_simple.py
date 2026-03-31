@@ -8,12 +8,11 @@ sys.path.insert(0, "/home/user/llm-trading-research/code")
 
 import numpy as np
 import pandas as pd
-
-from data.market_data_loader import SyntheticMarketGenerator
+from backtest.backtester import BacktestConfig, Backtester
 from data.feature_engineering import FeatureEngineer
-from rl.trading_env import TradingEnv
+from data.market_data_loader import SyntheticMarketGenerator
 from rl.rl_trainer import RLTrainer
-from backtest.backtester import Backtester, BacktestConfig
+from rl.trading_env import TradingEnv
 
 print("=" * 60)
 print("INTEGRATION TEST: End-to-End Trading Pipeline")

@@ -2,9 +2,9 @@
 Generate architecture and sequence diagrams using matplotlib when graphviz is not available.
 """
 
-import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+import matplotlib.pyplot as plt
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 # Architecture diagram
 fig, ax = plt.subplots(1, 1, figsize=(14, 10))

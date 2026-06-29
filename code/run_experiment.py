@@ -71,15 +71,38 @@ class ExperimentRunner:
         tickers = data_config["tickers"]
 
         if data_config["source"] == "yahoo":
-            loader = MarketDataLoader()
-            ohlcv_data = loader.fetch_ohlcv(
-                tickers, data_config["start_date"], data_config["end_date"]
-            )
-            macro_data = loader.fetch_macro_data(
-                data_config["macro_series"],
-                data_config["start_date"],
-                data_config["end_date"],
-            )
+            # Real market data from Yahoo Finance is the primary source. If the
+            # fetch fails (no network access, rate limiting, or empty response),
+            # fall back to the synthetic generator so the pipeline still runs.
+            try:
+                loader = MarketDataLoader()
+                ohlcv_data = loader.fetch_ohlcv(
+                    tickers, data_config["start_date"], data_config["end_date"]
+                )
+                if not ohlcv_data or all(
+                    getattr(df, "empty", True) for df in ohlcv_data.values()
+                ):
+                    raise RuntimeError("Yahoo Finance returned no data")
+                try:
+                    macro_data = loader.fetch_macro_data(
+                        data_config["macro_series"],
+                        data_config["start_date"],
+                        data_config["end_date"],
+                    )
+                except Exception as macro_exc:
+                    logger.warning(f"Macro data unavailable: {macro_exc}")
+                    macro_data = {}
+                logger.info("Loaded real market data from Yahoo Finance")
+            except Exception as exc:
+                logger.warning(
+                    f"Yahoo Finance fetch failed ({exc}); falling back to "
+                    f"synthetic market data so the pipeline can continue."
+                )
+                generator = SyntheticMarketGenerator(seed=self.seed)
+                ohlcv_data = generator.generate_ohlcv(
+                    tickers, data_config["start_date"], data_config["end_date"]
+                )
+                macro_data = {}
         else:  # synthetic
             generator = SyntheticMarketGenerator(seed=self.seed)
             ohlcv_data = generator.generate_ohlcv(
@@ -525,7 +548,7 @@ if __name__ == "__main__":
     config = {
         "seed": 42,
         "data": {
-            "source": "synthetic",  # Use synthetic for speed
+            "source": "yahoo",  # Real market data from Yahoo Finance (auto-falls back to synthetic if offline)
             "tickers": ["AAPL", "MSFT"],
             "start_date": "2024-01-01",
             "end_date": "2024-12-31",

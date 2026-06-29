@@ -76,8 +76,16 @@ class RLTrainer:
             "batch_size": 64,
             "gamma": 0.99,
             "verbose": 1,
-            "tensorboard_log": f"{save_dir}/tensorboard",
         }
+
+        # Only enable TensorBoard logging when the optional ``tensorboard``
+        # package is installed; otherwise Stable-Baselines3 raises an ImportError.
+        try:
+            import tensorboard  # noqa: F401
+
+            default_params["tensorboard_log"] = f"{save_dir}/tensorboard"
+        except ImportError:
+            logger.info("tensorboard not installed; TensorBoard logging disabled")
 
         if hyperparams:
             default_params.update(hyperparams)
@@ -139,9 +147,20 @@ class RLTrainer:
         )
         callbacks.append(eval_callback)
 
-        # Train
+        # Train. The SB3 progress bar requires the optional ``tqdm`` + ``rich``
+        # packages; fall back to no progress bar when they are unavailable.
+        try:
+            import rich  # noqa: F401
+            import tqdm  # noqa: F401
+
+            use_progress_bar = True
+        except ImportError:
+            use_progress_bar = False
+
         self.model.learn(
-            total_timesteps=total_timesteps, callback=callbacks, progress_bar=True
+            total_timesteps=total_timesteps,
+            callback=callbacks,
+            progress_bar=use_progress_bar,
         )
 
         # Save final model

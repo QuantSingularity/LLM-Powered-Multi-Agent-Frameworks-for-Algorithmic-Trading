@@ -320,13 +320,13 @@ confidence levels. Structure: Decision → Evidence → Reasoning → Risks.""",
 Current Price: ${current_price:.2f}
 
 Technical Indicators:
-{json.dumps(indicators, indent=2)}
+{json.dumps(indicators, indent=2, default=str)}
 
 Recent News Sentiment:
-{json.dumps(news_sentiment, indent=2)}
+{json.dumps(news_sentiment, indent=2, default=str)}
 
 Macroeconomic Context:
-{json.dumps(macro_context, indent=2)}
+{json.dumps(macro_context, indent=2, default=str)}
 
 Provide comprehensive analysis covering:
 1. Technical signal strength and direction
@@ -352,7 +352,7 @@ Analysis Summary:
 
 Current Position: {current_position:.2f} shares
 Portfolio Value: ${portfolio_value:.2f}
-Risk Limits: {json.dumps(risk_limits, indent=2)}
+Risk Limits: {json.dumps(risk_limits, indent=2, default=str)}
 
 Decide on action (BUY/SELL/HOLD) and position size adjustment.
 Output format: ACTION SIZE
@@ -370,7 +370,7 @@ Example: BUY 0.25 (increase allocation by 0.25 of portfolio)
 Decision: {decision}
 
 Supporting Evidence:
-{json.dumps(evidence, indent=2)}
+{json.dumps(evidence, indent=2, default=str)}
 
 Market Context:
 {context}

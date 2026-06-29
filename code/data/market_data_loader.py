@@ -10,8 +10,6 @@ from typing import Dict, List, Optional
 
 import numpy as np
 import pandas as pd
-import yfinance as yf
-from fredapi import Fred
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,11 +22,18 @@ class MarketDataLoader:
         self.data_dir = data_dir
         os.makedirs(data_dir, exist_ok=True)
 
-        # Initialize FRED API if key available
+        # Initialize FRED API lazily if key and package are available. This keeps
+        # the module importable (and usable for synthetic data) without the
+        # optional ``fredapi`` / ``yfinance`` dependencies installed.
+        self.fred = None
         fred_key = os.getenv("FRED_API_KEY")
-        self.fred = Fred(api_key=fred_key) if fred_key else None
+        if fred_key:
+            try:
+                from fredapi import Fred
 
-        yf.pdr_override()
+                self.fred = Fred(api_key=fred_key)
+            except ImportError:
+                logger.warning("fredapi not installed; macro data unavailable")
 
     def fetch_ohlcv(
         self, tickers: List[str], start_date: str, end_date: str, interval: str = "1d"
@@ -48,6 +53,15 @@ class MarketDataLoader:
         logger.info(
             f"Fetching OHLCV for {len(tickers)} tickers from {start_date} to {end_date}"
         )
+
+        try:
+            import yfinance as yf
+        except ImportError as exc:  # pragma: no cover - optional dependency
+            raise ImportError(
+                "yfinance is required to fetch live market data. "
+                "Install it with `pip install yfinance`, or use the synthetic "
+                "data source."
+            ) from exc
 
         data = {}
         for ticker in tickers:

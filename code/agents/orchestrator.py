@@ -269,7 +269,7 @@ Position %: {position_pct*100:.1f}%
 Portfolio Value: ${context.portfolio_value:.2f}
 
 Risk Checks:
-{json.dumps(checks, indent=2)}
+{json.dumps(checks, indent=2, default=str)}
 
 Approved: {approved}
 

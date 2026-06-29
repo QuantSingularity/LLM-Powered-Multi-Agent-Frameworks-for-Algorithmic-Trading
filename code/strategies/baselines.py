@@ -15,7 +15,6 @@ from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
-import statsmodels.api as sm
 
 
 @dataclass
@@ -66,6 +65,8 @@ def pairs_trading_signals(
     df = pd.concat([price_a, price_b], axis=1).dropna()
     df.columns = ["A", "B"]
 
+    import statsmodels.api as sm
+
     # Rolling hedge ratio via OLS
     hedge = pd.Series(index=df.index, dtype=float)
     spread = pd.Series(index=df.index, dtype=float)
@@ -108,6 +109,8 @@ def factor_investing_signal(
     y = df.iloc[:, 0]
     X = df.iloc[:, 1:]
     sig = pd.Series(0.0, index=df.index)
+
+    import statsmodels.api as sm
 
     for i in range(cfg.lookback, len(df)):
         y_w = y.iloc[i - cfg.lookback : i]

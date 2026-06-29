@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 import pandas as pd
@@ -12,7 +12,7 @@ from costs.transaction_costs import CostModelConfig, TransactionCostModel
 @dataclass
 class PaperConfig:
     initial_cash: float = 100000.0
-    cost_model: CostModelConfig = CostModelConfig()
+    cost_model: CostModelConfig = field(default_factory=CostModelConfig)
 
 
 class PaperBroker:

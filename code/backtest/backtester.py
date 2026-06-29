@@ -7,7 +7,7 @@ Enhancements:
 """
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 import numpy as np
@@ -23,7 +23,7 @@ class BacktestConfig:
     initial_capital: float = 100000.0
     position_limit: float = 0.2
     risk_free_rate: float = 0.02
-    cost_model: CostModelConfig = CostModelConfig()
+    cost_model: CostModelConfig = field(default_factory=CostModelConfig)
 
 
 class Backtester:

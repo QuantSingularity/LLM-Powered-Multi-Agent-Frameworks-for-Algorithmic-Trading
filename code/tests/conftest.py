@@ -1,8 +1,8 @@
 import os
 import sys
 
-# Ensure repo's code/ is importable as top-level modules (data, agents, etc.)
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-CODE = os.path.join(ROOT, "code")
-if CODE not in sys.path:
-    sys.path.insert(0, CODE)
+# Make the repo's code/ importable so tests can use bare names (agents, backtest, ...).
+# conftest is at code/tests/conftest.py, so code/ is the parent of this file's dir.
+_CODE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _CODE_DIR not in sys.path:
+    sys.path.insert(0, _CODE_DIR)

@@ -1,0 +1,114 @@
+{
+  "backtest": {
+    "AAPL": {
+      "total_return": 0.09218223630850475,
+      "annualized_return": 0.10729559205933592,
+      "volatility": 0.03702087455945161,
+      "sharpe_ratio": 2.358009990259642,
+      "max_drawdown": -0.0674240163315778,
+      "final_value": 109218.22363085047,
+      "num_trades": 292,
+      "gross": {
+        "total_return": 0.09218273351122819,
+        "annualized_return": 0.10729617470580455,
+        "volatility": 0.036824531772332275,
+        "sharpe_ratio": 2.3705983621329736,
+        "max_drawdown": -0.06742397514601273,
+        "final_value": 109218.27335112283,
+        "num_trades": 292
+      },
+      "net": {
+        "total_return": 0.09218223630850475,
+        "annualized_return": 0.10729559205933592,
+        "volatility": 0.03702087455945161,
+        "sharpe_ratio": 2.358009990259642,
+        "max_drawdown": -0.0674240163315778,
+        "final_value": 109218.22363085047,
+        "num_trades": 292
+      }
+    },
+    "MSFT": {
+      "total_return": 0.05716614721620328,
+      "annualized_return": 0.06636548470205272,
+      "volatility": 0.03282387734680809,
+      "sharpe_ratio": 1.4125535570392163,
+      "max_drawdown": -0.024602229682803456,
+      "final_value": 105716.61472162032,
+      "num_trades": 260,
+      "gross": {
+        "total_return": 0.057284031693902726,
+        "annualized_return": 0.06650292888739107,
+        "volatility": 0.03262829051942132,
+        "sharpe_ratio": 1.425233383272444,
+        "max_drawdown": -0.024601815609207822,
+        "final_value": 105728.40316939028,
+        "num_trades": 260
+      },
+      "net": {
+        "total_return": 0.05716614721620328,
+        "annualized_return": 0.06636548470205272,
+        "volatility": 0.03282387734680809,
+        "sharpe_ratio": 1.4125535570392163,
+        "max_drawdown": -0.024602229682803456,
+        "final_value": 105716.61472162032,
+        "num_trades": 260
+      }
+    }
+  },
+  "comparison": {
+    "Hybrid_AAPL": {
+      "total_return": 0.09218223630850475,
+      "annualized_return": 0.10729559205933592,
+      "volatility": 0.03702087455945161,
+      "sharpe_ratio": 2.358009990259642,
+      "max_drawdown": -0.0674240163315778,
+      "final_value": 109218.22363085047,
+      "num_trades": 292,
+      "gross": {
+        "total_return": 0.09218273351122819,
+        "annualized_return": 0.10729617470580455,
+        "volatility": 0.036824531772332275,
+        "sharpe_ratio": 2.3705983621329736,
+        "max_drawdown": -0.06742397514601273,
+        "final_value": 109218.27335112283,
+        "num_trades": 292
+      },
+      "net": {
+        "total_return": 0.09218223630850475,
+        "annualized_return": 0.10729559205933592,
+        "volatility": 0.03702087455945161,
+        "sharpe_ratio": 2.358009990259642,
+        "max_drawdown": -0.0674240163315778,
+        "final_value": 109218.22363085047,
+        "num_trades": 292
+      }
+    },
+    "Hybrid_MSFT": {
+      "total_return": 0.05716614721620328,
+      "annualized_return": 0.06636548470205272,
+      "volatility": 0.03282387734680809,
+      "sharpe_ratio": 1.4125535570392163,
+      "max_drawdown": -0.024602229682803456,
+      "final_value": 105716.61472162032,
+      "num_trades": 260,
+      "gross": {
+        "total_return": 0.057284031693902726,
+        "annualized_return": 0.06650292888739107,
+        "volatility": 0.03262829051942132,
+        "sharpe_ratio": 1.425233383272444,
+        "max_drawdown": -0.024601815609207822,
+        "final_value": 105728.40316939028,
+        "num_trades": 260
+      },
+      "net": {
+        "total_return": 0.05716614721620328,
+        "annualized_return": 0.06636548470205272,
+        "volatility": 0.03282387734680809,
+        "sharpe_ratio": 1.4125535570392163,
+        "max_drawdown": -0.024602229682803456,
+        "final_value": 105716.61472162032,
+        "num_trades": 260
+      }
+    }
+  }
+}

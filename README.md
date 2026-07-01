@@ -36,7 +36,7 @@ A production-ready multi-agent system that combines LLM reasoning with Reinforce
 
 ## Architecture
 
-The `MultiAgentOrchestrator` (`code/agents/orchestrator.py`) coordinates five specialized agents.
+The `MultiAgentOrchestrator` (`trading/agents/orchestrator.py`) coordinates five specialized agents.
 
 | Agent              | Responsibility        | Function                                                                              |
 | :----------------- | :-------------------- | :------------------------------------------------------------------------------------ |
@@ -50,23 +50,23 @@ The `MultiAgentOrchestrator` (`code/agents/orchestrator.py`) coordinates five sp
 
 ## Repository Structure
 
-| Path                   | Description                                                   |
-| :--------------------- | :------------------------------------------------------------ |
-| `code/agents/`         | Orchestrator and agent communication logic                    |
-| `code/backtest/`       | Vectorized backtesting engine                                 |
-| `code/brokers/`        | Alpaca and IBKR broker connectors                             |
-| `code/costs/`          | Transaction cost modeling (fixed, variable, market impact)    |
-| `code/data/`           | OHLCV, news, and macro data ingestion and feature engineering |
-| `code/explainability/` | LLM attention visualization and RL policy SHAP interpretation |
-| `code/models/`         | Unified LLM wrapper (GPT-4, Claude, etc.)                     |
-| `code/prompts/`        | Version-controlled YAML prompt registry per agent             |
-| `code/risk/`           | Portfolio-level VaR and drawdown control                      |
-| `code/rl/`             | Gymnasium trading environment and PPO/DQN trainer             |
-| `code/strategies/`     | Quantitative baselines (Momentum, Mean-Reversion, Pairs)      |
-| `code/reporting/`      | Trade reports and performance metrics                         |
-| `figures/`             | Generated equity curves and XAI visualizations                |
-| `results/`             | Experiment metrics, trade logs, and model checkpoints         |
-| `tests/`               | Unit and integration tests                                    |
+| Path                      | Description                                                   |
+| :------------------------ | :------------------------------------------------------------ |
+| `trading/agents/`         | Orchestrator and agent communication logic                    |
+| `trading/backtest/`       | Vectorized backtesting engine                                 |
+| `trading/brokers/`        | Alpaca and IBKR broker connectors                             |
+| `trading/costs/`          | Transaction cost modeling (fixed, variable, market impact)    |
+| `trading/data/`           | OHLCV, news, and macro data ingestion and feature engineering |
+| `trading/explainability/` | LLM attention visualization and RL policy SHAP interpretation |
+| `trading/models/`         | Unified LLM wrapper (GPT-4, Claude, etc.)                     |
+| `trading/prompts/`        | Version-controlled YAML prompt registry per agent             |
+| `trading/risk/`           | Portfolio-level VaR and drawdown control                      |
+| `trading/rl/`             | Gymnasium trading environment and PPO/DQN trainer             |
+| `trading/strategies/`     | Quantitative baselines (Momentum, Mean-Reversion, Pairs)      |
+| `trading/reporting/`      | Trade reports and performance metrics                         |
+| `figures/`                | Generated equity curves and XAI visualizations                |
+| `results/`                | Experiment metrics, trade logs, and model checkpoints         |
+| `tests/`                  | Unit and integration tests                                    |
 
 ---
 
@@ -81,7 +81,7 @@ cd LLM-Powered-Multi-Agent-Frameworks-for-Algorithmic-Trading
 export OPENAI_API_KEY="sk-..."
 
 docker-compose build && docker-compose up -d
-docker-compose run llm-trading python code/run_experiment.py
+docker-compose run llm-trading python trading/run_experiment.py
 ```
 
 ### Local Installation
@@ -90,12 +90,18 @@ docker-compose run llm-trading python code/run_experiment.py
 python3.10 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-python code/run_experiment.py
+python trading/run_experiment.py
 ```
 
 Results are saved to `results/` and figures to `figures/`.
 
 ---
+
+<!-- output-note -->
+
+### Output
+
+Console output stays readable: benign third-party warnings and library progress bars are suppressed, so only meaningful log lines remain. Each run finishes with a clean, aligned summary block reporting per-ticker total return, Sharpe ratio, max drawdown and final portfolio value.
 
 ## Results
 
@@ -113,13 +119,13 @@ Pilot experiment on AAPL comparing the hybrid system against traditional and sin
 
 ## Evaluation
 
-| Component              | Command                            |
-| :--------------------- | :--------------------------------- |
-| Unit tests             | `pytest tests/test_simple.py`      |
-| Integration tests      | `pytest tests/test_integration.py` |
-| Quantitative baselines | `code/strategies/baselines.py`     |
-| Ablation studies       | `code/prompts/experiments/`        |
-| Trade reports          | `code/reporting/trade_report.py`   |
+| Component              | Command                             |
+| :--------------------- | :---------------------------------- |
+| Unit tests             | `pytest tests/test_simple.py`       |
+| Integration tests      | `pytest tests/test_integration.py`  |
+| Quantitative baselines | `trading/strategies/baselines.py`   |
+| Ablation studies       | `trading/prompts/experiments/`      |
+| Trade reports          | `trading/reporting/trade_report.py` |
 
 ---
 

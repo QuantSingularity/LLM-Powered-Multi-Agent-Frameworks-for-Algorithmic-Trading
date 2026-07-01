@@ -38,7 +38,7 @@ RUN python3.10 -m spacy download en_core_web_sm
 COPY . .
 
 # Set Python path
-ENV PYTHONPATH=/workspace/code:$PYTHONPATH
+ENV PYTHONPATH=/workspace/trading:$PYTHONPATH
 
 # Default command
 CMD ["/bin/bash"]

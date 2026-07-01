@@ -75,7 +75,7 @@ class RLTrainer:
             "n_steps": 2048,
             "batch_size": 64,
             "gamma": 0.99,
-            "verbose": 1,
+            "verbose": 0,
         }
 
         # Only enable TensorBoard logging when the optional ``tensorboard``

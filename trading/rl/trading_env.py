@@ -156,7 +156,7 @@ class TradingEnv(gym.Env):
         """Convert discrete action to target position fraction of portfolio."""
         if action == 0:  # Sell
             return -self.max_position
-        elif action == 1:  # Hold — maintain current position
+        elif action == 1:  # Hold - maintain current position
             if self.total_value > 0:
                 current_price = self.data.iloc[self.current_step]["close"]
                 return (self.position * current_price) / self.total_value
